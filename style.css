@@ -1,0 +1,26 @@
+body {
+	font-family: sans-serif;
+	background: #222;
+	color: #DDD;
+}
+#container {
+	width: 800px;
+	margin: 0 auto;
+	text-align: center;
+	background: #111;
+	padding: 1px;
+}
+
+#container canvas {
+	background: #ffffff;
+	background-size: 700px 450px;
+	box-shadow: 5px 5px 5px black;
+}
+
+#container p {
+	font-size: 24px;
+}
+
+#container p span {
+	margin: 0 100px;
+}
