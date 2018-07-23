@@ -1,0 +1,16 @@
+-> Commit 1
+
+- First commit
+
+-> Commit 2
+
+- Adição do changelog
+- Adição do pause
+- Adição das mensagens ao usuário
+- Adição do inicio
+
+- Ajuste dos event listeners do teclado
+
+- Correção do readme
+
+- Remoção da ação do mouse

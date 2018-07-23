@@ -156,8 +156,8 @@ function Shooter(center, size) {
 		ctx.translate(this.center.x, this.center.y);
 		ctx.rotate(this.theta);
 		//cor ao atirar
-		ctx.fillStyle = "000000";
-		ctx.strokeStyle = "00ff26";
+		ctx.fillStyle = "#000000";
+		ctx.strokeStyle = "#00ff26";
 		ctx.beginPath();
 			ctx.moveTo(-this.size.w / 2, this.size.h / 2);
 			ctx.lineTo(this.size.w / 2,  this.size.h / 2);

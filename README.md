@@ -1,9 +1,11 @@
 # dcc104-canvas-exr04-oliveiraleo
 
--Barra de espaço: Atira
+Controles:
 
-Q/E: Vira a esquerda/direita
+- Barra de espaço: Atira
 
-A/D: Vira tudo a esquerda/direita
+- A/D: Vira a esquerda/direita
 
-Setas: Vira o canhao
+- Q/E: Vira completamente à esquerda/direita
+
+- Setas: Viram o canhao

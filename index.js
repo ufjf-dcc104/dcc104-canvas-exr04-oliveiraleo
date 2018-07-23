@@ -10,12 +10,16 @@ function Text(font, size, rgb) {
 		ctx.fillText(text, x, y);
 	}
 }
+//variaveis globais
+var pause = false;
+var inicio = false;
+
 //Regra do jogo
 function start() {
-	alert("A diversão vai começar!");
+	//alert("A diversão vai começar!");
 	var canvas = document.getElementById("game");
 	var ctx = canvas.getContext("2d");
-	var text = new Text();
+	var destruidos = new Text();
 
 	const WIDTH = canvas.offsetWidth;
 	const HEIGHT = canvas.offsetHeight;
@@ -44,7 +48,7 @@ function start() {
 	//reset do jogo
 	function reset() {
 		if(verificaInicio != 0){//controla a mensagem de reset
-			alert("Game Over!");
+			//alert("Game Over!");
 		}
 		verificaInicio++;
 		fim.play();
@@ -56,6 +60,8 @@ function start() {
 	}; reset();
 
 	var loop = function() {
+		if(inicio && !pause){
+
 		ctx.clearRect(0, 0, WIDTH, HEIGHT);
 		//musica jogo fundo
 		musica.play();
@@ -128,45 +134,56 @@ function start() {
 		shots.forEach( function(shot) { shot.draw(ctx); } );
 		//texto placar
 		shooter.draw(ctx);
-		text.raster(ctx, "Destruidos: " + pontos, 10, 25);
+		destruidos.raster(ctx, "Destruidos: " + pontos, 10, 25);
 
 		if(asteroids.length < lvl){
 			asteroids = asteroids.concat(gen.asteroid(lvl));
 		}
-
+	}else if(!inicio){
+		var msg = new Text("Courier", 30, "black");
+		canvas.fillStyle = "black";
+		canvas.fillRect = (0,0,WIDTH, HEIGHT);
+		msg.raster(ctx, "Aperte ENTER para começar", WIDTH/5, HEIGHT/2 );
+	}else if(pause){
+		var msg = new Text("Courier", 30, "black");
+		msg.raster(ctx, "Aperte P para continuar", WIDTH/4, HEIGHT/2 );
 	}
+
+}
 
 	setInterval(loop, 1000/FPS);
 	//controle do jogo
 	addEventListener("keydown", function(e){
-		if(e.keyCode == 32 && !shoot) { // Space
+		if(e.keyCode == 32 && !shoot) { // Espaco
 			ball.pos = {x: shooter.ballPos.x, y: shooter.ballPos.y};
 			ball.setVelocityVector(shooter.center);
 			shots.push(ball);
 			ball = null;
 			shoot = true;
-		}
-		else if(e.keyCode == 81 || e.keyCode == 37 || e.keyCode == 65){
+		}if(e.keyCode == 81 || e.keyCode == 37 || e.keyCode == 65){ //esquerda
 			shooter.omega = -2;
 			e.preventDefault();
-		}
-
-		else if(e.keyCode == 69 || e.keyCode == 39 || e.keyCode == 68){
+		}if(e.keyCode == 69 || e.keyCode == 39 || e.keyCode == 68){ //direita
 			shooter.omega = 2;
 			e.preventDefault();
-		}
-
+		}if(e.keyCode == 13){//Enter
+			inicio = true;
+			e.preventDefault();
+		}if(e.keyCode == 80){//P
+				pause = !pause;
+				//e.preventDefault();
+			}
 	});
 
 	addEventListener("keyup", function(e){
-		if(e.keyCode == 32) { // Space
+		if(e.keyCode == 32) { // Espaco
 			ball = new Shot(shooter.ballPos.x, shooter.ballPos.y, 0, -325, 12, "img/ball.png");
 			shoot = false;
 		}
-		else if(e.keyCode == 81 || e.keyCode == 37){
+		if(e.keyCode == 37 || e.keyCode == 65){ //esquerda
 			shooter.omega = 0;
 		}
-		else if(e.keyCode == 69 || e.keyCode == 39) {
+		if(e.keyCode == 39 || e.keyCode == 68) { //direita
 			shooter.omega = 0;
 		}
 	});
