@@ -8,11 +8,14 @@ const RAD4DEG = Math.PI / 180.0;
 const DEG4RAD = 180.0 / Math.PI;
 //parametros tiro
 function Shot(_x, _y, _vx, _vy, r) {
-	this.pos = {x: _x, y: _y};
-	this.vel = {vx: _vx, vy: _vy};
+	//this.pos = {x: _x, y: _y};
+	this.pos = {_x, _y};
+	//this.vel = {vx: _vx, vy: _vy};
+	this.vel = {_vx, _vy};
 	this.radius = r;
 
 	this.draw = function(ctx) {
+		console.log(this.pos);
 		ctx.fillStyle   = "#000000";
 		ctx.strokeStyle = "#344433";
 		ctx.beginPath();
@@ -42,12 +45,17 @@ function Shot(_x, _y, _vx, _vy, r) {
 }
 //explosao tiro
 var tiro = new Audio('sound/tiro.mp3');
+//queda asteroide som
+var fall = new Audio('sound/fall.mp3');
 //parametros asteroide
 function Asteroid(cx, cy, r, _vx, _vy) {
 	this.radius = r;
 	this.center = {x: cx, y: cy};
+	//this.center = {cx, cy};
 	this.vel = {vx: _vx, vy: _vy};
+	//this.vel = {_vx, _vy};
 	this.life = 3;
+	fall.play();
 
 	this.draw = function(ctx) {
 		//muda cor asteroide
@@ -77,7 +85,7 @@ function Asteroid(cx, cy, r, _vx, _vy) {
 		var width2 = this.radius / Math.sqrt(2);
 		if(this.center.x - width2 <= shot.pos.x && shot.pos.x <= this.center.x + width2) {
 			if(this.center.y - width2 <= shot.pos.y && shot.pos.y <= this.center.y + width2) {
-				// Atingiu
+				// Atingido
 				this.life -= 1;
 				if(this.life == 0){
 					tiro.play();
@@ -103,7 +111,7 @@ function Asteroid(cx, cy, r, _vx, _vy) {
 
 }
 //explosao predio
-var boom= new Audio('sound/boom.mp3');
+var boom = new Audio('sound/boom.mp3');
 //parametros dos predios
 function Build(_x, _y, _w, _h) {
 	this.pos  = {x: _x, y: _y};
@@ -130,10 +138,8 @@ function Build(_x, _y, _w, _h) {
 				boom.play();
 				this.life -= 1;
 				if(this.life == 0){
-
 					return 2;
 				}
-
 				return 1;
 			}
 		}
@@ -155,7 +161,7 @@ function Shooter(center, size) {
 		ctx.save();
 		ctx.translate(this.center.x, this.center.y);
 		ctx.rotate(this.theta);
-		//cor ao atirar
+		//cor
 		ctx.fillStyle = "#000000";
 		ctx.strokeStyle = "#00ff26";
 		ctx.beginPath();
@@ -181,14 +187,14 @@ function Shooter(center, size) {
 		this.ballPos.x = this.center.x + (this.size.h / 2) * Math.sin(this.theta);
 		this.ballPos.y = this.center.y - (this.size.h / 2) * Math.cos(this.theta);
 	}
-
+ var hit = new Audio('sound/siren.mp3');
 	this.colidiu = function(asteroid) {
 		var p = asteroid.getFrontPoint();
 		var w2 = this.size.w / 2;
 		if(this.center.x - w2 -10 <= p.x && p.x <= this.center.x + w2 + 10) {
 			if(this.ballPos.y + 10 < p.y) {
-
 				this.life -= 1;
+				hit.play();
 				if(this.life == 0){
 					return 2;
 				}

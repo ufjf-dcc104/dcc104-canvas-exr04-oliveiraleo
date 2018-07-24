@@ -14,3 +14,16 @@
 - Correção do readme
 
 - Remoção da ação do mouse
+
+-> Commit 3
+
+- Adição de uma tecla para reset
+- Adição de mais informações na tela
+
+- Ajuste da função de pause
+- Ajuste das mensagens do jogo
+
+- Correção da função de reset
+- Correção dos sons
+
+- Remoção de comentários e códigos desnecessários
