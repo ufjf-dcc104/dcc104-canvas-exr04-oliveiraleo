@@ -27,3 +27,10 @@
 - Correção dos sons
 
 - Remoção de comentários e códigos desnecessários
+
+-> Commit 4
+
+- Ajuste no readme
+- Ajuste na função de pause
+
+- Correção na função de reset

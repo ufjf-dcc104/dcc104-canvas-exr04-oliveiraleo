@@ -45,14 +45,22 @@ function start() {
 	var asteroids = [];
 	var tiros = 0;
 	var ratio = 0;
+	var recomeca = true;
+	var verificaInicio = false;
 	//var predios = 0;
 	//sons
 	var explosao = new Audio('sound/boom.mp3');
 	var musica = new Audio('sound/theme.mp3');
 	var fim = new Audio('sound/gameover.mp3');
-	var recomeca = true;
 	//reset do jogo
 	function reset() {
+		if(recomeca){
+			var msg = new Text("Courier", 30, "black");
+			if (verificaInicio) {
+			msg.raster(ctx, "Aperte R para continuar", WIDTH/4, HEIGHT/2 );
+			}
+		}
+		verificaInicio = true;
 		musica.currentTime = 0; //recomeca a musica de fundo
 		lvl = 1;
 		pontos = 0;
@@ -157,10 +165,7 @@ function start() {
 	}else if(pause){
 		var msg = new Text("Courier", 30, "black");
 		msg.raster(ctx, "Aperte P para continuar", WIDTH/4, HEIGHT/2 );
-	}else if(recomeca){
-		var msg = new Text("Courier", 30, "black");
-		msg.raster(ctx, "Aperte R para continuar", WIDTH/4, HEIGHT/2 );
-	}
+	}//else
 
 }
 

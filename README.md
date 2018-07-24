@@ -9,3 +9,7 @@ Controles:
 - Q/E: Vira completamente à esquerda/direita
 
 - Setas: Viram o canhao
+
+- P: Pausa o jogo
+
+- R: Recomeça o jogo após o game over
