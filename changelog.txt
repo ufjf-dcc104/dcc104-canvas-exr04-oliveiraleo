@@ -34,3 +34,7 @@
 - Ajuste na função de pause
 
 - Correção na função de reset
+
+-> Commit 5
+
+- Ajuste no texto na tela

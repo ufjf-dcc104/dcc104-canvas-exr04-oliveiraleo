@@ -39,7 +39,8 @@ function start() {
 	var shooter = new Shooter({x: WIDTH/2, y: street.pos.y+10}, {w: 84, h: 140}, "img/cannon");
 	var ball = new Shot(shooter.ballPos.x, shooter.ballPos.y, 0, -325, 12, "img/ball.png");
 
-	var lvl = 0; var pontos = 0;
+	var lvl = 0;
+	var pontos = 0;
 	var gen = new CollectionGenerator(WIDTH, HEIGHT);
 	var builds = [];
 	var asteroids = [];
@@ -151,10 +152,10 @@ function start() {
 		shooter.draw(ctx);
 		//texto placar
 		destruidos.raster(ctx, "Destruidos: " + pontos, 10, 25);
-		textoTiros.raster(ctx, "Tiros: " + tiros, 10, 55);
-		canhaoVidas.raster(ctx, "Vidas: " + shooter.life, 10, 85);
-		textoRatio.raster(ctx, "Precisão: " + ratio + "%", 10, 115);
-		textoBuilds.raster(ctx, "Prédios: " + builds.length, 10, 145);
+		canhaoVidas.raster(ctx, "Vidas: " + shooter.life, 10, 50);
+		textoBuilds.raster(ctx, "Prédios: " + builds.length, 10, 75);
+		textoTiros.raster(ctx, "Disparos: " + tiros, (WIDTH/2)+252, 25);
+		textoRatio.raster(ctx, "Precisão: " + ratio + "%", (WIDTH/2)+252, 50);
 
 		if(asteroids.length < lvl){
 			asteroids = asteroids.concat(gen.asteroid(lvl));
