@@ -38,3 +38,16 @@
 -> Commit 5
 
 - Ajuste no texto na tela
+
+-> Commit 6
+
+- Adição de novos efeitos sonoros
+
+- Ajuste da função de reset (agora os tiros apagam no game over)
+- Ajuste dos comentários existentes
+- Ajuste do texto na tela (agora o texto não sai da imagem)
+- Ajuste dos controles
+
+- Correção e otimização da exibição do texto na tela (redução da quantidade de variáveis e objetos usados)
+
+- Remoção de código desnecesário

@@ -16,20 +16,15 @@ var inicio = false;
 
 //Regra do jogo
 function start() {
-	//alert("A diversão vai começar!");
 	var canvas = document.getElementById("game");
 	var ctx = canvas.getContext("2d");
 	//texto do jogo na tela
-	var destruidos = new Text();
-	var textoTiros = new Text();
-	var canhaoVidas = new Text();
-	var textoRatio = new Text();
-	var textoBuilds = new Text();
+	var texto = new Text();
+	var msg = new Text("Courier", 30, "black");
 
 	const WIDTH = canvas.offsetWidth;
 	const HEIGHT = canvas.offsetHeight;
-	const street = { pos: {x: 0, y: HEIGHT-20},
-				     size: {w: WIDTH, h: 20} };
+	const street = { pos: {x: 0, y: HEIGHT-20}, size: {w: WIDTH, h: 20} };
 
 	const FPS = 60;
 	const DT = 1/FPS;
@@ -48,16 +43,30 @@ function start() {
 	var ratio = 0;
 	var recomeca = true;
 	var verificaInicio = false;
-	//var predios = 0;
 	//sons
-	var explosao = new Audio('sound/boom.mp3');
+	var explosao = new Audio();
+	explosao.src = "sound/boom.mp3";
+	var tiro = new Audio();
+	tiro.src = "sound/shot.mp3";
+
 	var musica = new Audio('sound/theme.mp3');
 	var fim = new Audio('sound/gameover.mp3');
+
+	var explode = function(){
+		explosao.load();
+		explosao.play();
+	}
+
+	var atira = function(){
+		tiro.volume = 0.2;
+		tiro.load();
+		tiro.play();
+	}
 	//reset do jogo
 	function reset() {
 		if(recomeca){
-			var msg = new Text("Courier", 30, "black");
 			if (verificaInicio) {
+				musica.pause();
 			msg.raster(ctx, "Aperte R para continuar", WIDTH/4, HEIGHT/2 );
 			}
 		}
@@ -71,7 +80,7 @@ function start() {
 		shooter.reset();//volta o shooter para posicao inicial
 		tiros = 0;
 		ratio = 0;
-		//shoot.length = 0;
+		shots.length = 0; // limpa os tiros da tela
 	}; reset();
 	//regra do jogo
 	var loop = function() {
@@ -100,17 +109,18 @@ function start() {
 		for(var i = 0; i < shots.length; i++) {
 			shots[i].move(DT, G);
 			if(shots[i].pos.y < 0 || shots[i].pos.x < 0 || shots[i].pos.x > WIDTH)
-				shots.splice(i, 1);
+				shots.splice(i, 1);// limpa os tiros que saem da tela
 		}
+		//move o shooter
 		shooter.move(DT, G);
 
 		for(var i = 0; i < asteroids.length; i++) {
 			for(var j = 0; j < shots.length; j++) {
 				var status = asteroids[i].reached(shots[j]);
-				if(status != 0) {
-					shots.splice(j, 1);
+				if(status != 0) {//tiro colidiu com asteroide
+					shots.splice(j, 1);//apaga o tiro da tela
 					if(status == 2) {
-						asteroids.splice(i, 1);
+						asteroids.splice(i, 1);// apaga o asteroide da tela
 						pontos++;
 						//controle de nivel
 						if(pontos % 3 == 0) {
@@ -127,7 +137,8 @@ function start() {
 				if(status != 0) {
 					asteroids.splice(j, 1);
 					if(status == 2) {
-						builds.splice(i, 1);
+						builds.splice(i, 1);//apaga o predio da tela
+						explode();
 						break;
 					}
 				}
@@ -136,7 +147,7 @@ function start() {
 		for(var i = 0; i < asteroids.length; i++) {
 			var status = shooter.colidiu(asteroids[i]);
 			if(status != 0) {
-				asteroids.splice(i, 1);
+				asteroids.splice(i, 1);//apaga asteroide que colidiu com o shooter
 				if(status == 2) {
 					reset();
 					fim.play();
@@ -151,23 +162,20 @@ function start() {
 		shots.forEach( function(shot) { shot.draw(ctx); } );
 		shooter.draw(ctx);
 		//texto placar
-		destruidos.raster(ctx, "Destruidos: " + pontos, 10, 25);
-		canhaoVidas.raster(ctx, "Vidas: " + shooter.life, 10, 50);
-		textoBuilds.raster(ctx, "Prédios: " + builds.length, 10, 75);
-		textoTiros.raster(ctx, "Disparos: " + tiros, (WIDTH/2)+252, 25);
-		textoRatio.raster(ctx, "Precisão: " + ratio + "%", (WIDTH/2)+252, 50);
+		texto.raster(ctx, "Destruidos: " + pontos, 10, 25);
+		texto.raster(ctx, "Vidas:" + shooter.life, 10, 50);
+		texto.raster(ctx, "Prédios:" + builds.length, 10, 75);
+		texto.raster(ctx, "Disparos:" + tiros, (WIDTH/2)+252, 25);
+		texto.raster(ctx, "Precisão:" + ratio + "%", (WIDTH/2)+252, 50);
 
 		if(asteroids.length < lvl){
 			asteroids = asteroids.concat(gen.asteroid(lvl));
 		}
 	}else if(!inicio){
-		var msg = new Text("Courier", 30, "black");
 		msg.raster(ctx, "Aperte ENTER para começar", WIDTH/5, HEIGHT/2 );
 	}else if(pause){
-		var msg = new Text("Courier", 30, "black");
 		msg.raster(ctx, "Aperte P para continuar", WIDTH/4, HEIGHT/2 );
-	}//else
-
+	}
 }
 
 	setInterval(loop, 1000/FPS);
@@ -180,10 +188,11 @@ function start() {
 			ball = null;
 			shoot = true;
 			tiros++;
+			atira();
 		}if(e.keyCode == 81 || e.keyCode == 37 || e.keyCode == 65){ //esquerda
 			shooter.omega = -2;
 			e.preventDefault();
-		}else if(e.keyCode == 69 || e.keyCode == 39 || e.keyCode == 68){ //direita
+		}if(e.keyCode == 69 || e.keyCode == 39 || e.keyCode == 68){ //direita
 			shooter.omega = 2;
 			e.preventDefault();
 		}if(e.keyCode == 13){// Enter
@@ -191,9 +200,10 @@ function start() {
 			e.preventDefault();
 		}if(e.keyCode == 80){// P
 				pause = !pause;
-				//e.preventDefault();
+			e.preventDefault();
 			}if (e.keyCode == 82) {// R
 				recomeca = true;
+				e.preventDefault();
 			}
 	});
 

@@ -15,7 +15,6 @@ function Shot(_x, _y, _vx, _vy, r) {
 	this.radius = r;
 
 	this.draw = function(ctx) {
-		console.log(this.pos);
 		ctx.fillStyle   = "#000000";
 		ctx.strokeStyle = "#344433";
 		ctx.beginPath();
@@ -110,8 +109,6 @@ function Asteroid(cx, cy, r, _vx, _vy) {
 	}
 
 }
-//explosao predio
-var boom = new Audio('sound/boom.mp3');
 //parametros dos predios
 function Build(_x, _y, _w, _h) {
 	this.pos  = {x: _x, y: _y};
@@ -135,7 +132,6 @@ function Build(_x, _y, _w, _h) {
 		var p = asteroid.getFrontPoint();
 		if(this.pos.x - 10 <= p.x && p.x <= this.pos.x + this.size.w + 10) {
 			if(this.pos.y + 20 < p.y) {
-				boom.play();
 				this.life -= 1;
 				if(this.life == 0){
 					return 2;
@@ -183,18 +179,26 @@ function Shooter(center, size) {
 		} else if(PI3 < this.theta) {
 			this.theta = PI3;
 		}
-
+		//move o canhao
 		this.ballPos.x = this.center.x + (this.size.h / 2) * Math.sin(this.theta);
 		this.ballPos.y = this.center.y - (this.size.h / 2) * Math.cos(this.theta);
 	}
- var hit = new Audio('sound/siren.mp3');
+//som sirene shooter
+ var hit = new Audio();
+ hit.src = "sound/siren.mp3";
+
+	var sirene = function(){
+		hit.load();
+		hit.play();
+	}
+ //colisao
 	this.colidiu = function(asteroid) {
 		var p = asteroid.getFrontPoint();
 		var w2 = this.size.w / 2;
 		if(this.center.x - w2 -10 <= p.x && p.x <= this.center.x + w2 + 10) {
 			if(this.ballPos.y + 10 < p.y) {
 				this.life -= 1;
-				hit.play();
+				sirene();
 				if(this.life == 0){
 					return 2;
 				}
@@ -210,12 +214,12 @@ function Shooter(center, size) {
 		this.omega = 0;
 	}
 }
-
+//popula os vetores de objetos
 function CollectionGenerator(W, H) {
 	this.WIDTH  = W;
 	this.HEIGHT = H;
 
-	this.build = function(n){
+	this.build = function(n){//predios
 		var builds = [];
 		var lastw = 0;
 
@@ -225,19 +229,17 @@ function CollectionGenerator(W, H) {
 			var xi = 5 + i * (lastw + 20);
 			var yi = this.HEIGHT - hi;
 
-
 			lastw = wi;
 
 			builds.push(new Build(xi, yi, wi, hi));
 		}
 		return builds;
-	},
-	this.asteroid = function(n) {
+	}
+	this.asteroid = function(n) {//asteroides
 		var asteroids = [];
 		var s = function() {
 			return Math.pow(-1, Math.floor(Math.random() * 2));
 		}
-
 		for(var i = 0; i < n; i++) {
 			var r  = Math.floor(8 + Math.random() * 4);
 			var cx = Math.floor(10 + Math.random() * this.WIDTH-10);
@@ -247,7 +249,6 @@ function CollectionGenerator(W, H) {
 
 			asteroids.push(new Asteroid(cx, cy, r, vx, vy));
 		}
-
 		return asteroids;
 	}
 };
