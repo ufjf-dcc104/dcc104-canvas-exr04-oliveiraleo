@@ -51,3 +51,11 @@
 - Correção e otimização da exibição do texto na tela (redução da quantidade de variáveis e objetos usados)
 
 - Remoção de código desnecesário
+
+-> Commit 7
+
+- Ajuste dos tiros no game over (agora eles são apagados ao fim da partida)
+- Ajuste pequeno na identação
+- Ajuste nos comentários
+
+- Remoção de arquivos desnecessários

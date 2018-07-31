@@ -67,7 +67,7 @@ function start() {
 		if(recomeca){
 			if (verificaInicio) {
 				musica.pause();
-			msg.raster(ctx, "Aperte R para continuar", WIDTH/4, HEIGHT/2 );
+				msg.raster(ctx, "Aperte R para continuar", WIDTH/4, HEIGHT/2 );
 			}
 		}
 		verificaInicio = true;
@@ -106,6 +106,7 @@ function start() {
 			if(ast.center.y > HEIGHT + ast.radius || ast.center.x < -ast.radius || ast.center.x > WIDTH + ast.radius)
 				asteroids.splice(i, 1);
 		}
+		//move os tiros na tela
 		for(var i = 0; i < shots.length; i++) {
 			shots[i].move(DT, G);
 			if(shots[i].pos.y < 0 || shots[i].pos.x < 0 || shots[i].pos.x > WIDTH)
@@ -113,8 +114,8 @@ function start() {
 		}
 		//move o shooter
 		shooter.move(DT, G);
-
-		for(var i = 0; i < asteroids.length; i++) {
+		//colisoes
+		for(var i = 0; i < asteroids.length; i++) {// tiro com asteroide
 			for(var j = 0; j < shots.length; j++) {
 				var status = asteroids[i].reached(shots[j]);
 				if(status != 0) {//tiro colidiu com asteroide
@@ -131,7 +132,7 @@ function start() {
 				}
 			}
 		}
-		for(var i = 0; i < builds.length; i++) {
+		for(var i = 0; i < builds.length; i++) { // predio com asteroide
 			for(var j = 0; j < asteroids.length; j++) {
 				var status = builds[i].colidiu(asteroids[j]);
 				if(status != 0) {
@@ -144,7 +145,7 @@ function start() {
 				}
 			}
 		}
-		for(var i = 0; i < asteroids.length; i++) {
+		for(var i = 0; i < asteroids.length; i++) {//asteroide com o canhao
 			var status = shooter.colidiu(asteroids[i]);
 			if(status != 0) {
 				asteroids.splice(i, 1);//apaga asteroide que colidiu com o shooter
@@ -167,11 +168,11 @@ function start() {
 		texto.raster(ctx, "Prédios:" + builds.length, 10, 75);
 		texto.raster(ctx, "Disparos:" + tiros, (WIDTH/2)+252, 25);
 		texto.raster(ctx, "Precisão:" + ratio + "%", (WIDTH/2)+252, 50);
-
+		//mantem os asteroides sendo gerados caso todos já tenham sido destruidos
 		if(asteroids.length < lvl){
 			asteroids = asteroids.concat(gen.asteroid(lvl));
 		}
-	}else if(!inicio){
+	}else if(!inicio){// mensagens que pausam o fluxo do jogo
 		msg.raster(ctx, "Aperte ENTER para começar", WIDTH/5, HEIGHT/2 );
 	}else if(pause){
 		msg.raster(ctx, "Aperte P para continuar", WIDTH/4, HEIGHT/2 );
@@ -211,11 +212,9 @@ function start() {
 		if(e.keyCode == 32) { // Espaco
 			ball = new Shot(shooter.ballPos.x, shooter.ballPos.y, 0, -325, 12, "img/ball.png");
 			shoot = false;
-		}
-		if(e.keyCode == 37 || e.keyCode == 65){ //esquerda
+		}if(e.keyCode == 37 || e.keyCode == 65){ //esquerda
 			shooter.omega = 0;
-		}
-		if(e.keyCode == 39 || e.keyCode == 68) { //direita
+		}if(e.keyCode == 39 || e.keyCode == 68) { //direita
 			shooter.omega = 0;
 		}
 	});
